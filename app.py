@@ -1,6 +1,7 @@
 import time
 
 import redis
+from waitress import serve
 from flask import Flask
 
 app = Flask(__name__)
@@ -53,3 +54,10 @@ def isPrime(number):
 @app.route('/primesStored')
 def primesStored():
     return '\n'.join([str(int(k)) for k in cache.keys()])
+
+@app.route('/clearKeys')
+def clearKeys():
+    cache.flushdb()
+    return "Keys cleared"
+
+serve(app, host='0.0.0.0', port=5000)
